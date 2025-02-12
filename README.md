@@ -25,17 +25,15 @@ Designed for easy deployment on [Heroku](https://heroku.com), [Railway](https://
 
 ## Project Structure
 
-
-
-
 ## Environment Variables
 
 Before deploying, set the following:
 
 - **MONGO_URI**: Your MongoDB connection string.
+- **DB_NAME** (optional): Your database name (defaults to `telegram_redirector` if not set).
 - **CUSTOM_DOMAIN** (optional): Your custom domain (e.g., `https://www.yourcustomdomain.com`).  
   If not set, the app uses the incoming request’s host.
-- **ADMINS**: A comma‑separated list of admin credentials in the format `username:password` (for example: `alice:secret1,bob:secret2`).
+- **ADMINS**: A comma‑separated list of admin credentials in the format `username:password` (e.g., `alice:secret1,bob:secret2`).
 
 ## Getting Started Locally
 
