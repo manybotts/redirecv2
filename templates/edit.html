@@ -1,20 +1,93 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <title>Edit Bot - {{ bot.bot_name }}</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Edit Bot - {{ bot.bot_name }}</title>
+  <link href="https://fonts.googleapis.com/css?family=Open+Sans:400,600&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Open Sans', sans-serif;
+      background: #f7f9fc;
+      margin: 0;
+      padding: 0;
+      animation: fadeIn 1s ease-in-out;
+    }
+    .container {
+      max-width: 500px;
+      margin: 3rem auto;
+      background: #fff;
+      padding: 2rem;
+      border-radius: 8px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    }
+    h1 {
+      text-align: center;
+      color: #333;
+      margin-bottom: 1.5rem;
+    }
+    label {
+      display: block;
+      margin-bottom: 0.5rem;
+      color: #555;
+    }
+    input[type="text"] {
+      width: 100%;
+      padding: 0.75rem;
+      margin-bottom: 1rem;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      font-size: 1rem;
+      box-sizing: border-box;
+      transition: border 0.3s ease;
+    }
+    input[type="text"]:focus {
+      border-color: #007BFF;
+      outline: none;
+    }
+    input[type="submit"] {
+      background: #007BFF;
+      color: #fff;
+      border: none;
+      padding: 0.75rem 1.5rem;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 1rem;
+      transition: background 0.3s ease;
+      width: 100%;
+    }
+    input[type="submit"]:hover {
+      background: #0056b3;
+    }
+    a {
+      display: block;
+      text-align: center;
+      margin-top: 1rem;
+      color: #007BFF;
+      text-decoration: none;
+      transition: color 0.3s ease;
+    }
+    a:hover {
+      color: #0056b3;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+  </style>
 </head>
 <body>
+  <div class="container">
     <h1>Edit Bot - {{ bot.bot_name }}</h1>
     {% if error %}
-         <p style="color: red;">{{ error }}</p>
+      <p style="color: red;">{{ error }}</p>
     {% endif %}
     <form method="post" action="/admin/edit/{{ bot.bot_name }}">
-         <label for="bot_username">Bot Username:</label><br>
-         <input type="text" id="bot_username" name="bot_username" value="{{ bot.bot_username }}" required><br><br>
-         <input type="submit" value="Save Changes">
+      <label for="bot_username">Bot Username:</label>
+      <input type="text" id="bot_username" name="bot_username" value="{{ bot.bot_username }}" required>
+      <input type="submit" value="Save Changes">
     </form>
-    <br>
     <a href="/admin">Back to Admin Interface</a>
+  </div>
 </body>
 </html>
