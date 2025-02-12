@@ -8,6 +8,10 @@
       "description": "Your MongoDB connection string",
       "required": true
     },
+    "DB_NAME": {
+      "description": "Name of the database to use for storing bot data (default: telegram_redirector)",
+      "required": false
+    },
     "CUSTOM_DOMAIN": {
       "description": "Your custom domain (e.g., https://www.yourcustomdomain.com). Leave empty to use the default platform domain.",
       "required": false
