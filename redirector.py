@@ -80,7 +80,7 @@ def add_bot():
     bot_link = f'{base_url}/{owner}/{bot_name}'
     return jsonify({'message': 'Bot added successfully', 'bot_link': bot_link}), 201
 
-# Redirect route for bots (includes owner)
+# Updated Redirect Route for Bots with Fallback
 @app.route('/<owner>/<bot_name>')
 def redirect_to_bot(owner, bot_name):
     bot = collection.find_one({'bot_name': bot_name, 'owner': owner})
@@ -88,15 +88,22 @@ def redirect_to_bot(owner, bot_name):
         return render_template('404.html'), 404
 
     bot_username = bot['bot_username']
-    telegram_url = f"https://t.me/{bot_username}"
-
+    
+    # Construct the Telegram URL using tg:// scheme (for mobile devices with Telegram installed)
+    tg_url = f"tg://resolve?domain={bot_username}"
+    
     # Preserve any query parameters (e.g., start=...)
     query = request.query_string.decode('utf-8')
     if query:
-        telegram_url = f"{telegram_url}?{query}"
-
-    # Render the styled redirect page that immediately triggers JS redirection
-    return render_template('redirect.html', bot_username=bot_username, telegram_url=telegram_url)
+        tg_url = f"{tg_url}&{query}"
+    
+    # Construct fallback web URL (for desktops or when tg:// fails)
+    web_url = f"https://t.me/{bot_username}"
+    if query:
+        web_url = f"{web_url}?{query}"
+    
+    # Render a minimal redirect page that attempts the tg:// scheme then falls back
+    return render_template('redirect.html', tg_url=tg_url, web_url=web_url)
 
 # Admin Interface (view, add, edit, delete) - scoped to logged-in admin
 @app.route('/admin', methods=['GET', 'POST'])
