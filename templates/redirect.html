@@ -3,35 +3,31 @@
 <head>
   <meta charset="UTF-8">
   <title>Redirecting...</title>
-  <script type="text/javascript">
-    function redirect() {
-      var now = Date.now();
-      // Attempt to open the Telegram app via the tg:// URL
-      window.location = "{{ tg_url }}";
-      // Fallback: if not redirected within 1 second, open the web URL
-      setTimeout(function() {
-        if (Date.now() - now < 2000) {
-          window.location = "{{ web_url }}";
-        }
-      }, 1000);
-    }
-    window.onload = redirect;
-  </script>
+  <link href="https://fonts.googleapis.com/css?family=Open+Sans:400,600&display=swap" rel="stylesheet">
   <style>
     body {
       font-family: 'Open Sans', sans-serif;
-      text-align: center;
-      padding-top: 50px;
       background: #f7f9fc;
       margin: 0;
-      color: #333;
+      padding: 0;
+      text-align: center;
+      animation: fadeIn 0.5s ease-in-out;
+    }
+    .container {
+      margin: 100px auto;
+      max-width: 500px;
+      background: #fff;
+      padding: 2rem;
+      border-radius: 8px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
     }
     h1 {
-      font-size: 2rem;
+      color: #333;
       margin-bottom: 1rem;
     }
     p {
       font-size: 1.1rem;
+      color: #666;
     }
     a {
       color: #007BFF;
@@ -41,10 +37,41 @@
     a:hover {
       color: #0056b3;
     }
+    .instruction {
+      margin-top: 1rem;
+      font-size: 0.9rem;
+      color: #b71c1c;
+      display: none;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
   </style>
+  <script type="text/javascript">
+    window.onload = function() {
+      // Immediately redirect
+      window.location.replace("{{ telegram_url }}");
+    };
+    // When the page becomes visible again (e.g. re-opened), show instructions
+    document.addEventListener("visibilitychange", function() {
+      if (!document.hidden) {
+        document.getElementById("instruction").style.display = "block";
+      }
+    });
+  </script>
+  <noscript>
+    <meta http-equiv="refresh" content="1;url={{ telegram_url }}">
+  </noscript>
 </head>
 <body>
-  <h1>Redirecting...</h1>
-  <p>If you are not redirected automatically, <a href="{{ web_url }}">click here</a>.</p>
+  <div class="container">
+    <h1>Redirecting...</h1>
+    <p>Redirecting to Telegram bot: <strong>{{ bot_username }}</strong></p>
+    <p>If you are not redirected automatically, <a href="{{ telegram_url }}">click here</a>.</p>
+    <p id="instruction" class="instruction">
+      If this page is re-opened or remains minimized, please close this window and click the redirect link again.
+    </p>
+  </div>
 </body>
 </html>
