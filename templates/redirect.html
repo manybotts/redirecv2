@@ -15,18 +15,19 @@
     }
     .container {
       margin: 100px auto;
-      max-width: 500px;
+      max-width: 600px;
       background: #fff;
-      padding: 2rem;
+      padding: 3rem;
       border-radius: 8px;
       box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
     }
     h1 {
       color: #333;
-      margin-bottom: 1rem;
+      margin-bottom: 1.5rem;
+      font-size: 2.5rem;
     }
     p {
-      font-size: 1.1rem;
+      font-size: 1.5rem;
       color: #666;
     }
     a {
@@ -37,31 +38,16 @@
     a:hover {
       color: #0056b3;
     }
-    .instruction {
-      margin-top: 1rem;
-      font-size: 0.9rem;
-      color: #b71c1c;
-      display: none;
-    }
     @keyframes fadeIn {
       from { opacity: 0; }
       to { opacity: 1; }
     }
   </style>
   <script type="text/javascript">
+    // Immediately redirect on page load.
     window.onload = function() {
-      // Use sessionStorage to ensure we only redirect once per session.
-      if (!sessionStorage.getItem('redirected')) {
-        sessionStorage.setItem('redirected', 'true');
-        window.location.replace("{{ telegram_url }}");
-      }
+      window.location.replace("{{ telegram_url }}");
     };
-    // When the page becomes visible again (e.g. if re-opened), show the instruction message.
-    document.addEventListener("visibilitychange", function() {
-      if (!document.hidden) {
-        document.getElementById("instruction").style.display = "block";
-      }
-    });
   </script>
   <noscript>
     <meta http-equiv="refresh" content="1;url={{ telegram_url }}">
@@ -72,9 +58,6 @@
     <h1>Redirecting...</h1>
     <p>Redirecting to Telegram bot: <strong>{{ bot_username }}</strong></p>
     <p>If you are not redirected automatically, <a href="{{ telegram_url }}">click here</a>.</p>
-    <p id="instruction" class="instruction">
-      If this page is re‑opened or remains minimized, please close this window and click the redirect link again.
-    </p>
   </div>
 </body>
 </html>
