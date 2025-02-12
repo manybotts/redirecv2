@@ -16,13 +16,14 @@ Designed for easy deployment on [Heroku](https://heroku.com), [Railway](https://
 
 Deploy with just a click on your preferred platform:
 
-- [![Deploy to Heroku](https://www.herokucdn.com/deploy/button.svg)](https://heroku.com/deploy?template=https://github.com/yourusername/yourrepo)
-- [![Deploy on Railway](https://railway.app/button.svg)](https://railway.app/template?referralCode=YOUR_RAILWAY_REFERRAL_CODE)
-- [![Deploy on Koyeb](https://www.koyeb.com/static/images/deploy-on-koyeb.svg)](https://app.koyeb.com/new?repository=https://github.com/yourusername/yourrepo)
+- [![Deploy to Heroku](https://www.herokucdn.com/deploy/button.svg)](https://heroku.com/deploy?template=https://github.com/manybotts/redirecv2)
+- [![Deploy on Railway](https://railway.app/button.svg)](https://railway.app/template?repository=https://github.com/manybotts/redirecv2&referralCode=YOUR_RAILWAY_REFERRAL_CODE)
+- [![Deploy on Koyeb](https://www.koyeb.com/static/images/deploy-on-koyeb.svg)](https://app.koyeb.com/new?repository=https://github.com/manybotts/redirecv2)
 
-> **Note:** Replace `yourusername/yourrepo` with your actual GitHub repository path and update referral/template links as needed.
+> **Note:** Replace `YOUR_RAILWAY_REFERRAL_CODE` with your actual referral code if applicable.
 
 ## Project Structure
+
 
 . ├── Procfile ├── Dockerfile ├── README.md ├── redirector.py ├── requirements.txt ├── runtime.txt └── templates ├── index.html ├── admin.html ├── edit.html ├── redirect.html └── 404.html
 
