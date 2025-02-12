@@ -1,12 +1,61 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <title>Telegram Bot Redirector</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Telegram Bot Redirector</title>
+  <link href="https://fonts.googleapis.com/css?family=Open+Sans:400,600&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Open Sans', sans-serif;
+      margin: 0;
+      padding: 0;
+      background: linear-gradient(135deg, #6B73FF, #000DFF);
+      color: #fff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      animation: fadeIn 1s ease-in-out;
+    }
+    .container {
+      background: rgba(0, 0, 0, 0.5);
+      padding: 2rem;
+      border-radius: 8px;
+      text-align: center;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+      max-width: 600px;
+      width: 90%;
+    }
+    h1 {
+      font-size: 2.5rem;
+      margin-bottom: 1rem;
+    }
+    p {
+      font-size: 1.2rem;
+      margin-bottom: 1.5rem;
+    }
+    a {
+      text-decoration: none;
+      color: #FFB400;
+      font-weight: 600;
+      transition: color 0.3s ease;
+    }
+    a:hover {
+      color: #FFD700;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+  </style>
 </head>
 <body>
-    <h1>Welcome to the Telegram Bot Redirector</h1>
-    <p>Use the <code>/add</code> API endpoint to add a new Telegram bot redirect.</p>
-    <p>Or, visit the <a href="/admin">admin interface</a> for a user-friendly way to manage bots.</p>
+  <div class="container">
+    <h1>Welcome to Telegram Bot Redirector</h1>
+    <p>Your one‑stop solution for managing permanent Telegram bot file store links.</p>
+    <p>Use our API to add new bots, or access the admin interface for management.</p>
+    <p><a href="/admin">Go to Admin Panel</a></p>
+  </div>
 </body>
 </html>
