@@ -1,0 +1,23 @@
+{
+  "name": "Telegram Bot Redirector",
+  "description": "A web app to dynamically redirect users to multiple Telegram bots.",
+  "repository": "https://github.com/manybotts/redirecv2",
+  "keywords": ["telegram", "bot", "redirect", "flask"],
+  "env": {
+    "MONGO_URI": {
+      "description": "Your MongoDB connection string",
+      "required": true
+    },
+    "CUSTOM_DOMAIN": {
+      "description": "Your custom domain (e.g., https://www.yourcustomdomain.com). Leave empty to use the default platform domain.",
+      "required": false
+    },
+    "PORT": {
+      "description": "The port the application should listen on (default is 5000)",
+      "required": false
+    }
+  },
+  "scripts": {
+    "postdeploy": "echo 'Deployment complete!'"
+  }
+}
