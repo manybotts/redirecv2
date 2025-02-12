@@ -14,14 +14,18 @@ Designed for easy deployment on [Heroku](https://heroku.com), [Railway](https://
 
 ## One‑Click Deploy
 
-Deploy with just a click on your preferred platform:
-
-- **Koyeb**:  
+- **Heroku:**  
+  [![Deploy to Heroku](https://www.herokucdn.com/deploy/button.svg)](https://heroku.com/deploy?template=https://github.com/manybotts/redirecv2)
+- **Railway:**  
+  [![Deploy on Railway](https://railway.app/button.svg)](https://railway.app/template?referralCode=YOUR_RAILWAY_REFERRAL_CODE)
+- **Koyeb:**  
   [![Deploy to Koyeb](https://www.koyeb.com/static/images/deploy/button.svg)](https://app.koyeb.com/deploy?name=redirecv2&repository=manybotts%2Fredirecv2&branch=main&builder=dockerfile&instance_type=free&env%5BDB_NAME%5D=hybrid&env%5BMONGO_URI%5D=mongodb%2Bsrv%3A%2F%2Fibox%3A1111%40cluster0.hpl8s.mongodb.net%2F%3FretryWrites%3Dtrue%26w%3Dmajority%26appName%3DCluster0&env%5BPORT%5D=8080&ports=5000%3Bhttp%3B%2F&hc_protocol%5B5000%5D=tcp&hc_grace_period%5B5000%5D=5&hc_interval%5B5000%5D=30&hc_restart_limit%5B5000%5D=3&hc_timeout%5B5000%5D=5&hc_path%5B5000%5D=%2F&hc_method%5B5000%5D=get)
 
-> **Note:** Replace any environment values (such as `MONGO_URI`) as needed.
+> **Note:** Replace any environment values (such as `MONGO_URI` or `YOUR_RAILWAY_REFERRAL_CODE`) as needed.
 
 ## Project Structure
+
+
 
 
 ## Environment Variables
