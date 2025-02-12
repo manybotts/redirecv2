@@ -50,10 +50,13 @@
   </style>
   <script type="text/javascript">
     window.onload = function() {
-      // Immediately redirect
-      window.location.replace("{{ telegram_url }}");
+      // Use sessionStorage to ensure we only redirect once per session.
+      if (!sessionStorage.getItem('redirected')) {
+        sessionStorage.setItem('redirected', 'true');
+        window.location.replace("{{ telegram_url }}");
+      }
     };
-    // When the page becomes visible again (e.g. re-opened), show instructions
+    // When the page becomes visible again (e.g. if re-opened), show the instruction message.
     document.addEventListener("visibilitychange", function() {
       if (!document.hidden) {
         document.getElementById("instruction").style.display = "block";
@@ -70,7 +73,7 @@
     <p>Redirecting to Telegram bot: <strong>{{ bot_username }}</strong></p>
     <p>If you are not redirected automatically, <a href="{{ telegram_url }}">click here</a>.</p>
     <p id="instruction" class="instruction">
-      If this page is re-opened or remains minimized, please close this window and click the redirect link again.
+      If this page is re‑opened or remains minimized, please close this window and click the redirect link again.
     </p>
   </div>
 </body>
