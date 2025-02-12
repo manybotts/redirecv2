@@ -3,8 +3,6 @@
 <head>
   <meta charset="UTF-8">
   <title>Redirecting...</title>
-  <!-- Use meta-refresh as a fallback -->
-  <meta http-equiv="refresh" content="3;url={{ telegram_url }}">
   <link href="https://fonts.googleapis.com/css?family=Open+Sans:400,600&display=swap" rel="stylesheet">
   <style>
     body {
@@ -26,7 +24,6 @@
     h1 {
       color: #333;
       margin-bottom: 1rem;
-      font-size: 2.5rem;
     }
     p {
       font-size: 1.1rem;
@@ -46,14 +43,13 @@
     }
   </style>
   <script type="text/javascript">
-    document.addEventListener("DOMContentLoaded", function() {
-      // Log the target URL for debugging purposes
-      var target = "{{ telegram_url }}";
-      console.log("Redirecting to:", target);
-      // Use location.href instead of replace in case replace is causing issues
-      window.location.href = target;
-    });
+    window.onload = function() {
+      window.location.replace("{{ telegram_url }}");
+    }
   </script>
+  <noscript>
+    <meta http-equiv="refresh" content="1;url={{ telegram_url }}">
+  </noscript>
 </head>
 <body>
   <div class="container">
