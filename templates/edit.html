@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Edit Bot - {{ bot.bot_name }}</title>
+</head>
+<body>
+    <h1>Edit Bot - {{ bot.bot_name }}</h1>
+    {% if error %}
+         <p style="color: red;">{{ error }}</p>
+    {% endif %}
+    <form method="post" action="/admin/edit/{{ bot.bot_name }}">
+         <label for="bot_username">Bot Username:</label><br>
+         <input type="text" id="bot_username" name="bot_username" value="{{ bot.bot_username }}" required><br><br>
+         <input type="submit" value="Save Changes">
+    </form>
+    <br>
+    <a href="/admin">Back to Admin Interface</a>
+</body>
+</html>
