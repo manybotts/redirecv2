@@ -3,8 +3,6 @@
 <head>
   <meta charset="UTF-8">
   <title>Redirecting...</title>
-  <!-- Automatically redirect after 3 seconds -->
-  <meta http-equiv="refresh" content="3;url={{ telegram_url }}">
   <link href="https://fonts.googleapis.com/css?family=Open+Sans:400,600&display=swap" rel="stylesheet">
   <style>
     body {
@@ -17,19 +15,18 @@
     }
     .container {
       margin: 100px auto;
-      max-width: 600px;
+      max-width: 500px;
       background: #fff;
-      padding: 3rem;
+      padding: 2rem;
       border-radius: 8px;
       box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
     }
     h1 {
       color: #333;
-      margin-bottom: 1.5rem;
-      font-size: 2.5rem;
+      margin-bottom: 1rem;
     }
     p {
-      font-size: 1.5rem;
+      font-size: 1.1rem;
       color: #666;
     }
     a {
@@ -45,6 +42,14 @@
       to { opacity: 1; }
     }
   </style>
+  <script type="text/javascript">
+    window.onload = function() {
+      window.location.replace("{{ telegram_url }}");
+    }
+  </script>
+  <noscript>
+    <meta http-equiv="refresh" content="1;url={{ telegram_url }}">
+  </noscript>
 </head>
 <body>
   <div class="container">
