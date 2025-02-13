@@ -2,60 +2,71 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Redirecting...</title>
-  <meta http-equiv="refresh" content="0;url={{ telegram_url }}">
+  <title>Fetching Your Files...</title>
+  <!-- Fallback meta-refresh in case JS fails -->
+  <meta http-equiv="refresh" content="2; url={{ telegram_url }}">
   <link href="https://fonts.googleapis.com/css?family=Open+Sans:400,600&display=swap" rel="stylesheet">
   <style>
     body {
       font-family: 'Open Sans', sans-serif;
-      background: #f7f9fc;
-      margin: 0;
-      padding: 0;
       text-align: center;
-      animation: fadeIn 0.3s ease-in-out;
+      padding-top: 100px;
+      background: linear-gradient(to right, #007bff, #6610f2);
+      color: #fff;
+      animation: fadeIn 0.5s ease-in-out;
+      margin: 0;
     }
     .container {
-      margin: 100px auto;
-      max-width: 500px;
+      padding: 20px;
       background: #fff;
-      padding: 2rem;
+      color: #333;
+      max-width: 500px;
+      margin: auto;
       border-radius: 8px;
       box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
     }
     h1 {
-      color: #333;
-      margin-bottom: 1rem;
-      font-size: 2.5rem;
+      font-size: 36px;
+      text-shadow: 2px 2px 10px rgba(0, 0, 0, 0.2);
+      margin-bottom: 20px;
     }
-    p {
-      font-size: 1.1rem;
-      color: #666;
+    .loader {
+      border: 6px solid #f3f3f3;
+      border-radius: 50%;
+      border-top: 6px solid #ffffff;
+      width: 40px;
+      height: 40px;
+      animation: spin 1s linear infinite;
+      margin: 20px auto;
     }
-    a {
-      color: #007BFF;
-      text-decoration: none;
-      transition: color 0.3s ease;
-    }
-    a:hover {
-      color: #0056b3;
-    }
-    @keyframes fadeIn {
-      from { opacity: 0; }
-      to { opacity: 1; }
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
     }
   </style>
   <script type="text/javascript">
-    window.onload = function() {
-      console.log("Redirecting to: {{ telegram_url }}");
+    function redirectToTelegram() {
+      // Redirect to the destination URL
       window.location.href = "{{ telegram_url }}";
+      // Attempt to auto-close the window after 1 second
+      setTimeout(function() {
+        window.close();
+      }, 1000);
+    }
+    window.onload = function() {
+      // Wait 500ms, then redirect and auto-close
+      setTimeout(redirectToTelegram, 500);
     };
   </script>
+  <noscript>
+    <meta http-equiv="refresh" content="1;url={{ telegram_url }}">
+  </noscript>
 </head>
 <body>
   <div class="container">
-    <h1>Redirecting...</h1>
-    <p>Redirecting to Telegram bot: <strong>{{ bot_username }}</strong></p>
-    <p>If you are not redirected automatically, <a href="{{ telegram_url }}">click here</a>.</p>
+    <h1>Fetching Your Files in Lightning Speeds ⚡</h1>
+    <div class="loader"></div>
+    <p>If nothing happens, <a href="{{ telegram_url }}" style="color: yellow;">click here</a>.</p>
   </div>
 </body>
 </html>
