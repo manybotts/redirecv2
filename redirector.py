@@ -1,9 +1,3 @@
-
----
-
-### 4. redirector.py
-
-```python
 from flask import Flask, redirect, request, jsonify, render_template, session, url_for, flash
 from pymongo import MongoClient
 import os
@@ -38,8 +32,10 @@ def login_required(f):
 mongo_uri = os.getenv('MONGO_URI')
 if not mongo_uri:
     raise Exception("MONGO_URI environment variable not set")
+# Use DB_NAME environment variable (default to "telegram_redirector")
+db_name = os.getenv("DB_NAME", "telegram_redirector")
 client = MongoClient(mongo_uri)
-db = client['telegram_redirector']
+db = client[db_name]
 collection = db['bots']
 
 @app.route('/')
