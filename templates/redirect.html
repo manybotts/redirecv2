@@ -2,7 +2,8 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Redirecting...</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Admin Panel - Telegram Bot Redirector</title>
   <link href="https://fonts.googleapis.com/css?family=Open+Sans:400,600&display=swap" rel="stylesheet">
   <style>
     body {
@@ -10,25 +11,86 @@
       background: #f7f9fc;
       margin: 0;
       padding: 0;
-      text-align: center;
-      animation: fadeIn 0.5s ease-in-out;
+      animation: fadeIn 1s ease-in-out;
     }
     .container {
-      margin: 100px auto;
-      max-width: 500px;
+      max-width: 900px;
+      margin: 2rem auto;
       background: #fff;
-      padding: 2rem;
       border-radius: 8px;
+      padding: 2rem;
       box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
     }
     h1 {
+      text-align: center;
       color: #333;
-      margin-bottom: 1rem;
-      font-size: 2.5rem;
+      margin-bottom: 1.5rem;
     }
-    p {
-      font-size: 1.1rem;
-      color: #666;
+    h2 {
+      color: #444;
+      margin-top: 2rem;
+    }
+    .message {
+      text-align: center;
+      padding: 0.75rem;
+      border-radius: 4px;
+      margin-bottom: 1rem;
+    }
+    .success {
+      background: #e0f8e9;
+      color: #2d7a35;
+    }
+    .error {
+      background: #fdecea;
+      color: #b71c1c;
+    }
+    form {
+      margin-bottom: 2rem;
+    }
+    label {
+      display: block;
+      margin-bottom: 0.5rem;
+      color: #555;
+    }
+    input[type="text"] {
+      width: 100%;
+      padding: 0.75rem;
+      margin-bottom: 1rem;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      font-size: 1rem;
+      box-sizing: border-box;
+      transition: border 0.3s ease;
+    }
+    input[type="text"]:focus {
+      border-color: #007BFF;
+      outline: none;
+    }
+    input[type="submit"], button {
+      background: #007BFF;
+      color: #fff;
+      border: none;
+      padding: 0.75rem 1.5rem;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 1rem;
+      transition: background 0.3s ease;
+    }
+    input[type="submit"]:hover, button:hover {
+      background: #0056b3;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 1rem;
+    }
+    th, td {
+      text-align: left;
+      padding: 0.75rem;
+      border-bottom: 1px solid #ddd;
+    }
+    th {
+      background: #f0f0f0;
     }
     a {
       color: #007BFF;
@@ -43,29 +105,75 @@
       to { opacity: 1; }
     }
   </style>
-  <script type="text/javascript">
-    window.onload = function() {
-      var destination = "{{ telegram_url }}";
-      // Try to open the destination in a new window or tab.
-      var newWindow = window.open(destination, "_blank");
-      // Attempt to close the current window.
-      if (newWindow) {
-        window.close();
-      } else {
-        // If window.close() is blocked, fall back to replacing the current location.
-        window.location.replace(destination);
+  <script>
+    // Function to open the redirect page via script (so that auto-close can work)
+    function openRedirect(url) {
+      var newWindow = window.open(url, '_blank');
+      if (!newWindow) {
+        // If pop-ups are blocked, fallback to navigating in the current window.
+        window.location.href = url;
       }
-    };
+    }
+    function copyToClipboard(elementId) {
+      var copyText = document.getElementById(elementId);
+      copyText.select();
+      copyText.setSelectionRange(0, 99999);
+      document.execCommand("copy");
+      alert("Copied: " + copyText.value);
+    }
   </script>
-  <noscript>
-    <meta http-equiv="refresh" content="1;url={{ telegram_url }}">
-  </noscript>
 </head>
 <body>
   <div class="container">
-    <h1>Redirecting...</h1>
-    <p>Redirecting to Telegram bot: <strong>{{ bot_username }}</strong></p>
-    <p>If the page does not close automatically, please close this window and <a href="{{ telegram_url }}">click here</a> to continue.</p>
+    <h1>Admin Panel</h1>
+    
+    {% if success %}
+      <div class="message success">{{ success }}</div>
+    {% endif %}
+    {% if error %}
+      <div class="message error">{{ error }}</div>
+    {% endif %}
+    
+    <h2>Add New Bot</h2>
+    <form method="post" action="/admin">
+      <label for="bot_name">Bot Name:</label>
+      <input type="text" id="bot_name" name="bot_name" required>
+      <label for="bot_username">Bot Username:</label>
+      <input type="text" id="bot_username" name="bot_username" required>
+      <input type="submit" value="Add Bot">
+    </form>
+    
+    <h2>Existing Bots</h2>
+    {% if bots %}
+      <table>
+        <tr>
+          <th>Bot Name</th>
+          <th>Bot Username</th>
+          <th>Bot Link</th>
+          <th>Actions</th>
+        </tr>
+        {% for bot in bots %}
+        <tr>
+          <td>{{ bot.bot_name }}</td>
+          <td>{{ bot.bot_username }}</td>
+          <td>
+            <input type="text" value="{{ base_url }}/{{ admin_username }}/{{ bot.bot_name }}" id="link-{{ bot.bot_name }}" readonly style="width:100%; margin-bottom: 0.5rem;">
+            <button onclick="copyToClipboard('link-{{ bot.bot_name }}')">Copy</button>
+            <br>
+            <a href="#" onclick="openRedirect('{{ base_url }}/{{ admin_username }}/{{ bot.bot_name }}'); return false;">Open Redirect</a>
+          </td>
+          <td>
+            <a href="/admin/edit/{{ bot.bot_name }}">Edit</a> | 
+            <form method="post" action="/admin/delete/{{ bot.bot_name }}" style="display:inline;" onsubmit="return confirm('Are you sure you want to delete this bot?');">
+              <input type="submit" value="Delete">
+            </form>
+          </td>
+        </tr>
+        {% endfor %}
+      </table>
+    {% else %}
+      <p>No bots found.</p>
+    {% endif %}
   </div>
 </body>
 </html>
