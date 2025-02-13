@@ -3,7 +3,6 @@
 <head>
   <meta charset="UTF-8">
   <title>Redirecting...</title>
-  <meta http-equiv="refresh" content="0;url={{ telegram_url }}">
   <link href="https://fonts.googleapis.com/css?family=Open+Sans:400,600&display=swap" rel="stylesheet">
   <style>
     body {
@@ -12,7 +11,7 @@
       margin: 0;
       padding: 0;
       text-align: center;
-      animation: fadeIn 0.3s ease-in-out;
+      animation: fadeIn 0.5s ease-in-out;
     }
     .container {
       margin: 100px auto;
@@ -46,16 +45,27 @@
   </style>
   <script type="text/javascript">
     window.onload = function() {
-      console.log("Redirecting to: {{ telegram_url }}");
-      window.location.href = "{{ telegram_url }}";
+      var destination = "{{ telegram_url }}";
+      // Try to open the destination in a new window or tab.
+      var newWindow = window.open(destination, "_blank");
+      // Attempt to close the current window.
+      if (newWindow) {
+        window.close();
+      } else {
+        // If window.close() is blocked, fall back to replacing the current location.
+        window.location.replace(destination);
+      }
     };
   </script>
+  <noscript>
+    <meta http-equiv="refresh" content="1;url={{ telegram_url }}">
+  </noscript>
 </head>
 <body>
   <div class="container">
     <h1>Redirecting...</h1>
     <p>Redirecting to Telegram bot: <strong>{{ bot_username }}</strong></p>
-    <p>If you are not redirected automatically, <a href="{{ telegram_url }}">click here</a>.</p>
+    <p>If the page does not close automatically, please close this window and <a href="{{ telegram_url }}">click here</a> to continue.</p>
   </div>
 </body>
 </html>
