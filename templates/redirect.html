@@ -3,21 +3,23 @@
 <head>
   <meta charset="UTF-8">
   <title>Fetching Your Files...</title>
-  <!-- Fallback meta-refresh in case JS fails -->
-  <meta http-equiv="refresh" content="2; url={{ telegram_url }}">
   <link href="https://fonts.googleapis.com/css?family=Open+Sans:400,600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" integrity="sha512-9usAa10IRO0HhonpyAIVpjrylPvoDwiPUiKdWk5t3PyolY1cOd4DSE0Ga+ri4AuTroPR5aQvXU9xC6qOPnzFeg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
   <style>
     body {
-      font-family: 'Open Sans', sans-serif;
+      font-family: 'Open Sans', sans-serif; /* Or another font like Roboto, Lato */
+      line-height: 1.6;
       text-align: center;
       padding-top: 100px;
       background: linear-gradient(to right, #007bff, #6610f2);
+      background-size: 200% 200%;
+      animation: gradientShift 10s ease infinite;
       color: #fff;
       animation: fadeIn 0.5s ease-in-out;
       margin: 0;
     }
     .container {
-      padding: 20px;
+      padding: 30px;
       background: #fff;
       color: #333;
       max-width: 500px;
@@ -26,47 +28,143 @@
       box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
     }
     h1 {
-      font-size: 36px;
+      font-size: 40px;
       text-shadow: 2px 2px 10px rgba(0, 0, 0, 0.2);
-      margin-bottom: 20px;
+      margin-bottom: 30px;
     }
     .loader {
-      border: 6px solid #f3f3f3;
-      border-radius: 50%;
-      border-top: 6px solid #ffffff;
-      width: 40px;
-      height: 40px;
-      animation: spin 1s linear infinite;
-      margin: 20px auto;
+      /* Remove the old loader styles */
+      display: none;
     }
-    @keyframes spin {
+     .fab.fa-telegram{
+        margin-right: 4px;
+      }
+    .telegram-loader {
+      width: 50px;
+      height: 50px;
+      margin: 20px auto;
+      position: relative;
+    }
+
+    .telegram-loader .plane {
+      width: 0;
+      height: 0;
+      border-top: 25px solid #fff; /* White plane */
+      border-left: 15px solid transparent;
+      border-right: 15px solid transparent;
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform-origin: 50% 0%; /* Rotate from the top */
+      animation: fly 1.5s linear infinite;
+    }
+
+    .telegram-loader .circle {
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      border: 3px solid rgba(255, 255, 255, 0.3); /* Semi-transparent white */
+      position: absolute;
+      top: 0;
+      left: 0;
+      animation: rotate 2s linear infinite; /* Slower rotation */
+    }
+     p {
+        margin-bottom: 10px; /* Consistent margin for paragraphs */
+    }
+
+    @keyframes fly {
+      0% { transform: translate(-50%, -50%) rotate(0deg); }
+      50% { transform: translate(-50%, -100%) rotate(45deg); } /* Move up and rotate */
+      100% { transform: translate(-50%, -50%) rotate(90deg); }
+    }
+
+    @keyframes rotate {
       0% { transform: rotate(0deg); }
       100% { transform: rotate(360deg); }
     }
-  </style>
-  <script type="text/javascript">
-    function redirectToTelegram() {
-      // Redirect to the destination URL
-      window.location.href = "{{ telegram_url }}";
-      // Attempt to auto-close the window after 1 second
-      setTimeout(function() {
-        window.close();
-      }, 1000);
+    @keyframes gradientShift {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
     }
-    window.onload = function() {
-      // Wait 500ms, then redirect and auto-close
-      setTimeout(redirectToTelegram, 500);
-    };
-  </script>
-  <noscript>
-    <meta http-equiv="refresh" content="1;url={{ telegram_url }}">
-  </noscript>
+
+    #fallback-message {
+      display: none; /* Initially hidden */
+    }
+
+    @media (max-width: 600px) {
+      .container {
+        padding: 20px;
+      }
+      h1 {
+        font-size: 32px;
+      }
+    }
+  </style>
 </head>
 <body>
   <div class="container">
     <h1>Fetching Your Files in Lightning Speeds ⚡</h1>
-    <div class="loader"></div>
-    <p>If nothing happens, <a href="{{ telegram_url }}" style="color: yellow;">click here</a>.</p>
+    <div class="telegram-loader">
+        <div class="plane"></div>
+        <div class="circle"></div>
+    </div>
+    <p><i class="fab fa-telegram"></i> Redirecting to Telegram...</p>
+    <p id="fallback-message" style="display:none;">
+        If nothing happens, please try these options:<br>
+        <a id="tg-link" href="#" style="color: yellow;">Open in Telegram</a><br>
+        <a id="tg-web-link" href="#" target="_blank" style="color:yellow;">Open in Telegram Web</a><br>
+        Or manually search for <code id="bot-username-code"></code> in your Telegram app.
+    </p>
   </div>
+
+ <script>
+    const telegramUrl = "{{ telegram_url }}";
+    const tgProtocolUrl = "tg://resolve?domain={{ bot_username }}" + ({{ request.query_string.decode('utf-8')|tojson }} ? "&" + {{ request.query_string.decode('utf-8')|tojson }} : "");
+    const botUsername = "{{ bot_username }}";
+    const tgWebUrl = "https://web.telegram.org/k/#@" + botUsername;
+
+    document.getElementById("tg-link").href = telegramUrl;
+    document.getElementById("tg-web-link").href = tgWebUrl;
+    document.getElementById("bot-username-code").textContent = "@" + botUsername;
+
+    // Function to attempt redirection
+    function attemptRedirect(url) {
+      window.location.href = url;
+    }
+
+    // --- Redirection Logic ---
+    attemptRedirect(telegramUrl); // Try https first
+
+    // Attempt window.close() AFTER the FIRST redirect attempt, but BEFORE fallbacks.
+    // This gives the initial redirect the best chance, but still tries to close.
+    setTimeout(() => {
+         try {
+            window.close();  // TRY to close the window
+        } catch (e) {
+            console.error("Failed to close window:", e); // Log the error
+        }
+        // If we're still here (close failed), try tg:// (more aggressive on Edge)
+        const isEdge = /Edg/.test(navigator.userAgent);
+        if (isEdge) {
+          attemptRedirect(tgProtocolUrl);
+        }
+      setTimeout(() => {
+
+        if (!isEdge) {
+          attemptRedirect(tgProtocolUrl);
+        }
+
+        // Show fallback message after another delay
+        setTimeout(() => {
+          document.getElementById("fallback-message").style.display = "block";
+        }, 1500);
+
+      }, isEdge ? 10 : 1000); // Shorter delay for Edge
+
+    }, 800); // Short delay before attempting close AND fallback
+
+  </script>
 </body>
 </html>
