@@ -1,119 +1,120 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
+  <meta charset="UTF-8" />
   <title>Fetching Your Files...</title>
-  <link href="https://fonts.googleapis.com/css?family=Open+Sans:400,600&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" integrity="sha512-9usAa10IRO0HhonpyAIVpjrylPvoDwiPUiKdWk5t3PyolY1cOd4DSE0Ga+ri4AuTroPR5aQvXU9xC6qOPnzFeg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+  <!-- Resource hints to cut DNS/TLS latency -->
+  <link rel="dns-prefetch" href="https://t.me">
+  <link rel="preconnect" href="https://t.me" crossorigin>
+  <link rel="dns-prefetch" href="https://web.telegram.org">
+  <link rel="preconnect" href="https://web.telegram.org" crossorigin>
+
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+
   <style>
-    body { font-family:'Open Sans',sans-serif; line-height:1.6; text-align:center; padding-top:100px;
-           background:linear-gradient(to right,#007bff,#6610f2); background-size:200% 200%;
-           animation:gradientShift 10s ease infinite, fadeIn .5s ease-in-out; color:#fff; margin:0; }
-    .container { padding:30px; background:#fff; color:#333; max-width:500px; margin:auto; border-radius:8px;
-                 box-shadow:0 4px 10px rgba(0,0,0,.1); }
-    h1 { font-size:40px; text-shadow:2px 2px 10px rgba(0,0,0,.2); margin-bottom:30px; }
-    .loader { display:none; }
-    .fab.fa-telegram { margin-right:4px; }
-    .telegram-loader { width:50px; height:50px; margin:20px auto; position:relative; }
-    .telegram-loader .plane { width:0; height:0; border-top:25px solid #fff; border-left:15px solid transparent;
-                              border-right:15px solid transparent; position:absolute; top:50%; left:50%;
-                              transform-origin:50% 0%; animation:fly 1.5s linear infinite; }
-    .telegram-loader .circle { width:50px; height:50px; border-radius:50%; border:3px solid rgba(255,255,255,.3);
-                               position:absolute; top:0; left:0; animation:rotate 2s linear infinite; }
-    p { margin-bottom:10px; }
-    #fallback-message { display:none; }
-    @keyframes fly { 0%{transform:translate(-50%,-50%) rotate(0)} 50%{transform:translate(-50%,-100%) rotate(45deg)} 100%{transform:translate(-50%,-50%) rotate(90deg)} }
-    @keyframes rotate { 0%{transform:rotate(0)} 100%{transform:rotate(360deg)} }
-    @keyframes gradientShift { 0%{background-position:0% 50%} 50%{background-position:100% 50%} 100%{background-position:0% 50%} }
-    @media (max-width:600px){ .container{padding:20px} h1{font-size:32px} }
+    /* kept minimal; no external fonts/icons */
+    :root { --bg1:#007bff; --bg2:#6610f2; }
+    html,body{height:100%}
+    body{font-family:system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,Arial,sans-serif;line-height:1.6;
+         display:grid;place-items:center;margin:0;color:#fff;background:linear-gradient(90deg,var(--bg1),var(--bg2));
+         background-size:200% 200%;animation:gradientShift 10s ease infinite}
+    .container{padding:28px;background:#fff;color:#333;max-width:520px;width:92%;border-radius:10px;
+               box-shadow:0 6px 22px rgba(0,0,0,.18);text-align:center}
+    h1{font-size:1.9rem;margin:.2rem 0 1rem}
+    .loader{width:54px;height:54px;margin:14px auto;position:relative}
+    .plane{width:0;height:0;border-top:27px solid #5469d4;border-left:16px solid transparent;border-right:16px solid transparent;
+           position:absolute;top:50%;left:50%;transform-origin:50% 0%;animation:fly 1.5s linear infinite}
+    .circle{width:54px;height:54px;border-radius:50%;border:3px solid rgba(0,0,0,.08);position:absolute;top:0;left:0;
+            animation:rotate 2s linear infinite}
+    #fallback-message{display:none}
+    a.btn{color:#1f2937;text-decoration:none;border:1px solid #e5e7eb;border-radius:10px;padding:.5rem .85rem;display:inline-block;margin:.25rem}
+    @keyframes fly{0%{transform:translate(-50%,-50%) rotate(0)}50%{transform:translate(-50%,-100%) rotate(45deg)}100%{transform:translate(-50%,-50%) rotate(90deg)}}
+    @keyframes rotate{0%{transform:rotate(0)}100%{transform:rotate(360deg)}}
+    @keyframes gradientShift{0%{background-position:0% 50%}50%{background-position:100% 50%}100%{background-position:0% 50%}}
+    @media (prefers-reduced-motion: reduce){*{animation:none!important}}
   </style>
-</head>
-<body>
-  <div class="container">
-    <h1>Fetching Your Files in Lightning Speeds ⚡</h1>
-    <div class="telegram-loader">
-      <div class="plane"></div><div class="circle"></div>
-    </div>
-    <p><i class="fab fa-telegram"></i> Redirecting to Telegram...</p>
-    <p id="fallback-message">
-      If nothing happens, please try these options:<br>
-      <a id="tg-link" href="#" style="color: yellow;">Open in Telegram</a><br>
-      <a id="tg-web-link" href="#" target="_blank" style="color: yellow;">Open in Telegram Web</a><br>
-      Or manually search for <code id="bot-username-code"></code> in your Telegram app.
-    </p>
-  </div>
 
-  <!-- Jinja vars -->
+  <!-- Early kick-off: do not wait for body/paint -->
   <script>
-    window.__BOT__ = "{{ bot_username }}";
+    // Jinja-provided values
+    window.__BOT__   = "{{ bot_username }}";
     window.__HTTPS__ = "{{ telegram_url }}";
-  </script>
 
-  <script>
-    (function () {
-      const bot = String(window.__BOT__ || "").trim();
-      const httpsLink = String(window.__HTTPS__ || "").trim();
+    (function fastHandoff(){
+      const bot = String(window.__BOT__||"").trim();
+      const httpsLink = String(window.__HTTPS__||"").trim();
 
-      // Derive start payload from the server-built https link; avoids injecting raw query twice.
+      // Parse start payload once
       let start = "";
-      try { start = new URL(httpsLink, location.origin).searchParams.get("start") || ""; } catch (_) {}
+      try { start = new URL(httpsLink, location.href).searchParams.get("start") || ""; } catch(_) {}
 
-      const tgProtocol = `tg://resolve?domain=${encodeURIComponent(bot)}${start ? `&start=${encodeURIComponent(start)}` : ""}`;
-      const tmeLink    = `https://t.me/${encodeURIComponent(bot)}${start ? `?start=${encodeURIComponent(start)}` : ""}`;
-      const webLink    = `https://web.telegram.org/k/#@${encodeURIComponent(bot)}${start ? `?start=${encodeURIComponent(start)}` : ""}`;
+      const tgProtocol = `tg://resolve?domain=${encodeURIComponent(bot)}${start?`&start=${encodeURIComponent(start)}`:""}`;
+      const tmeLink    = `https://t.me/${encodeURIComponent(bot)}${start?`?start=${encodeURIComponent(start)}`:""}`;
+      const webLink    = `https://web.telegram.org/k/#@${encodeURIComponent(bot)}${start?`?start=${encodeURIComponent(start)}`:""}`;
 
-      // Wire manual links
-      const $tg = document.getElementById("tg-link");
-      const $web = document.getElementById("tg-web-link");
-      const $code = document.getElementById("bot-username-code");
-      if ($tg)  $tg.href = tmeLink;
-      if ($web) $web.href = webLink;
-      if ($code) $code.textContent = "@" + bot;
+      // Expose for the later UI script
+      window.__LINKS__ = { tgProtocol, tmeLink, webLink };
 
       const launchedAt = Date.now();
       let handoff = false;
 
-      function tryProtocol() {
-        const iframe = document.createElement("iframe");
-        iframe.style.display = "none";
-        iframe.src = tgProtocol;
-        document.body.appendChild(iframe);
+      // Try protocol ASAP via hidden iframe (desktop-friendly)
+      const iframe = document.createElement("iframe");
+      iframe.style.display = "none";
+      iframe.src = tgProtocol;
+      document.documentElement.appendChild(iframe);
 
-        // If the app doesn't take focus promptly, try the https t.me link
-        setTimeout(() => {
-          if (!handoff && Date.now() - launchedAt < 2200) {
-            location.href = tmeLink;
-          }
-        }, 700);
-      }
-
-      function closeAfterHandoff() {
-        handoff = true;
-        // Close only when we've been backgrounded; avoids killing the page before Chrome hands off.
-        setTimeout(() => {
-          try {
-            if (document.hidden || document.visibilityState === "hidden") window.close();
-          } catch (_) { /* ignore; some browsers block close() */ }
-        }, 600);
-      }
-
+      // Close only if we lose visibility (proof of handoff)
       document.addEventListener("visibilitychange", () => {
-        if (document.hidden && Date.now() - launchedAt > 150) closeAfterHandoff();
-      }, { passive: true });
-
-      // Safari/Edge oddities
-      window.addEventListener("pagehide", () => { handoff = true; }, { passive: true });
-
-      // Ultimate fallback after 5s
-      setTimeout(() => {
-        if (!handoff) {
-          document.getElementById("fallback-message").style.display = "block";
-          location.href = webLink;
+        if (document.hidden && Date.now() - launchedAt > 120) {
+          handoff = true;
+          setTimeout(() => { try { if (document.hidden) window.close(); } catch(_) {} }, 400);
         }
-      }, 5000);
+      }, { passive:true });
 
-      // Kick off sequence
-      tryProtocol();
+      // Safari/Edge quirks
+      window.addEventListener("pagehide", () => { handoff = true; }, { passive:true });
+
+      // Faster fallback to https t.me if protocol didn’t take
+      setTimeout(() => {
+        if (!handoff) location.href = tmeLink;
+      }, 350);  // was 700ms; tuned for snappier desktop
+
+      // Final fallback to Web after 4s
+      setTimeout(() => {
+        if (!handoff) location.href = webLink;
+      }, 4000);
+    })();
+  </script>
+</head>
+<body>
+  <div class="container">
+    <h1>Fetching Your Files in Lightning Speeds ⚡</h1>
+    <div class="loader"><div class="plane"></div><div class="circle"></div></div>
+    <p>Redirecting to Telegram…</p>
+    <p id="fallback-message">
+      If nothing happens, try:
+      <br><a id="tg-link" class="btn" href="#">Open in Telegram</a>
+      <a id="tg-web-link" class="btn" href="#" target="_blank" rel="noopener">Open Telegram Web</a>
+      <br>Or search for <code id="bot-username-code"></code> in your app.
+    </p>
+  </div>
+
+  <!-- Wire buttons after DOM is ready; handoff already started in <head> -->
+  <script>
+    (function wireUI(){
+      const bot = String(window.__BOT__||"").trim();
+      const { tmeLink, webLink } = window.__LINKS__ || {};
+      const $tg = document.getElementById("tg-link");
+      const $web = document.getElementById("tg-web-link");
+      const $code = document.getElementById("bot-username-code");
+      if ($tg && tmeLink)  $tg.href = tmeLink;
+      if ($web && webLink) $web.href = webLink;
+      if ($code) $code.textContent = "@" + bot;
+
+      // Reveal fallback text quickly so users have an escape if handlers are blocked
+      setTimeout(() => { const f = document.getElementById("fallback-message"); if (f) f.style.display = "block"; }, 900);
     })();
   </script>
 </body>
